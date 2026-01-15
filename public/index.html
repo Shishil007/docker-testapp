@@ -3,30 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css" type="text/css" />
     <title>Home Page</title>
+    <link rel="stylesheet" href="./style.css" type="text/css" />
 </head>
 <body>
-    <h1>Hi student, Welcome to XYZ University!</h1>
-    <p>You can sign up to the platform to access all important notes & lectures.</p>
 
-    <form action="/addUser" method="POST" target="_blank" id="signupForm">
-        <div class="field">
-            <label for="email">Email: </label>
-            <input type="text" placeholder="jane@email.com" name="email">
-        </div>
-        <div class="field">    
-        <label for="username">Username: </label>
-            <input type="text" placeholder="Jane Doe" name="username">
-        </div>
-        <div class="field">
-            <label for="password">Password: </label>
-            <input type="password" placeholder="password" name="password">
-        </div>
-        
-        <button id="formBtn">Create Account</button>
-        
-    </form>
+<h1>Hi student, Welcome to XYZ University!</h1>
+<p>You can sign up to the platform to access all important notes & lectures.</p>
+
+<form id="signupForm">
+    <div class="field">
+        <label for="email">Email:</label>
+        <input id="email" type="text" name="email" placeholder="jane@email.com" required>
+    </div>
+
+    <div class="field">
+        <label for="username">Username:</label>
+        <input id="username" type="text" name="username" placeholder="Jane Doe" required>
+    </div>
+
+    <div class="field">
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="password" placeholder="password" required>
+    </div>
+
+    <button type="submit">Create Account</button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("signupForm");
+
+        if (!form) {
+            console.error("❌ signupForm not found");
+            return;
+        }
+
+        console.log("✅ signupForm found");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            console.log("🚀 Form submitted");
+
+            const data = {
+                email: document.getElementById("email").value,
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            };
+
+            console.log("📦 Sending data:", data);
+
+            try {
+                const response = await fetch("http://localhost:5050/addUser", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                console.log("✅ Server response:", result);
+                alert("User created successfully!");
+
+                form.reset();
+            } catch (err) {
+                console.error("❌ Fetch failed:", err);
+                alert("Request failed");
+            }
+        });
+    });
+</script>
+
+
 </body>
-
 </html>
